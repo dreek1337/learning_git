@@ -31,4 +31,4 @@ def controller(request: Request, timeout=int(random() * 11)) -> Response:
         response_dict['status_text'] = 'NOT_FOUND'
         return func(**response_dict)
     else:
-        return 'Неизветсная ошибка'
+        return 'Ошибка'
