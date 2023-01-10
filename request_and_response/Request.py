@@ -1,5 +1,4 @@
 from typing import Final
-from random import random
 
 
 class BaseRequest:
@@ -45,7 +44,7 @@ class Request(BaseRequest):
         if self.get_method in self.valid_methods:
             return self.get_method
         else:
-            raise 'Неподходящий метод HTTP'
+            raise 'Неподходящий метод http'
 
     @property
     def params(self):
