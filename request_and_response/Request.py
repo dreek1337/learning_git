@@ -44,7 +44,7 @@ class Request(BaseRequest):
         if self.get_method in self.valid_methods:
             return self.get_method
         else:
-            raise 'Неподходящий метод http'
+            raise 'Неподходящий метод request_and_response'
 
     @property
     def params(self):
