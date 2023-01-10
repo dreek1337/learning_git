@@ -32,4 +32,3 @@ def controller(request: Request, timeout=int(random() * 11)) -> Response:
         return func(**response_dict)
     else:
         return 'Неизветсная ошибка'
-    
