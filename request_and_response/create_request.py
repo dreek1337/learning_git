@@ -51,7 +51,7 @@ class Request(BaseRequest):
         """
         Проверка валидности params
         """
-        if self.get_params and 5 < len(self.get_params):
+        if not self.get_params or 5 < len(self.get_params):
             raise 'Количество параметров, больше 5 или меньще 1'
         else:
             return self.get_params

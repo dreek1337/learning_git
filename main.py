@@ -41,11 +41,12 @@ def controller(request: Request) -> Response:
                 status=choice(range(150, 350, 10)), timeout=choice(range(11)))
     response_dict = {'url': r.url,
                      'method': r.method,
-                     'params': r.params,
                      'status': r.status
                      }
     try:
         r.timeout
+        r.params
+        response_dict['params'] = r.params
         return create_response(**response_dict)
     except Exception as err:
         raise f'Ошибочкаааа: {err} | status: 408, status_text: TIMEOUT_ERROR'
