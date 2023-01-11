@@ -20,8 +20,7 @@ class Request(BaseRequest):
     """
     valid_methods: Final = ['GET', 'POST', 'PUT', 'PATCH']
 
-    def __init__(self, url: str, method, timeout: int = choice(range(1, 11)),
-                 status: int = choice(range(150, 350)), params: dict = None) -> None:
+    def __init__(self, url: str, method, timeout: int, status: int, params: dict = None) -> None:
         super().__init__(url, method, params, status)
         self.get_timeout = timeout
 
