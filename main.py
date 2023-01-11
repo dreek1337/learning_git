@@ -1,14 +1,35 @@
+from random import choice
 from request_and_response import Response, Request
 
 
-def create_response(url, method, params, status, status_text, content=''):
+def retry(n):
+    """
+    Созданеи декоратора, который отправляет повторные запросы
+    """
+    def take_func_retry(func):
+        def start(*args, **kwargs):
+            for i in range(n):
+                r = func(*args, **kwargs)
+                print(r.status)
+                if 200 <= r.status < 300:
+                    return func(*args, **kwargs)
+                else:
+                    continue
+            raise 'Oшибка'
+
+        return start
+
+    return take_func_retry
+
+
+def create_response(url, method, params, status):
     """
     Создание Response
     """
-    return Response(url=url, method=method, params=params,
-                    status=status, status_text=status_text, content=content)
+    return Response(url=url, method=method, params=params, status=status)
 
 
+@retry(n=10)
 def controller(request: Request) -> Response:
     """
     Проверка данных для создания Response
@@ -18,20 +39,9 @@ def controller(request: Request) -> Response:
                      'params': request.params,
                      'status': request.status
                      }
-    status_num = {200: 'OK', 201: 'CREATED', 400: 'BAD_REQUEST',
-                  401: 'NOT_AUTH', 404: 'NOT_FOUND'}
     try:
         request.timeout
-        if request.method in ['GET', 'POST'] and 300 < request.status >= 200:
-            response_dict['status_text'] = status_num[request.status]
-            response_dict['content'] = status_num[request.status]
-            return create_response(**response_dict)
-        elif 500 < request.status >= 400:
-            response_dict['status_text'] = status_num[request.status]
-            return create_response(**response_dict)
-        else:
-            return 'Ошибка'
+        return create_response(**response_dict)
     except:
-        response_dict['status_text'] = 'TIMEOUT_ERROR'
         response_dict['status'] = 408
         return create_response(**response_dict)
