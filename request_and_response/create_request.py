@@ -7,11 +7,11 @@ class BaseRequest:
     """
     valid_methods = ['GET', 'POST']
 
-    def __init__(self, url: str, method, params: dict, status: int) -> None:
+    def __init__(self, url: str, method, params: dict = None, status: int = None) -> None:
         self.get_url = url
         self.get_method = method
         self.get_params = params
-        self.status = status
+        self.get_status = status
 
 
 class Request(BaseRequest):
@@ -20,8 +20,8 @@ class Request(BaseRequest):
     """
     valid_methods: Final = ['GET', 'POST', 'PUT', 'PATCH']
 
-    def __init__(self, url: str, method, timeout: int, status: int, params: dict = None) -> None:
-        super().__init__(url, method, params, status)
+    def __init__(self, timeout: int, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.get_timeout = timeout
 
     @property
@@ -64,4 +64,14 @@ class Request(BaseRequest):
         if self.get_timeout <= 5:
             return self.get_timeout
         else:
-            raise 'Параметр меньше значения 5'
+            raise 'Параметр больше значения 5'
+
+    @property
+    def status(self):
+        """
+        Проверка валидности timeout
+        """
+        if self.get_timeout <= 5:
+            return self.get_status
+        else:
+            return 408
