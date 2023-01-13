@@ -1,13 +1,23 @@
 from typing import Final
 from random import choice
 
+
 class BaseRequest:
     """
     Получение запроса от клиента
     """
-    valid_methods = ['GET', 'POST']
+    valid_methods = [
+        'GET',
+        'POST',
+    ]
 
-    def __init__(self, url: str, method, params: dict = None, status: int = None) -> None:
+    def __init__(
+            self,
+            url: str,
+            method: str,
+            params: dict = None,
+            status: int = None,
+    ) -> None:
         self.get_url = url
         self.get_method = method
         self.get_params = params
@@ -18,9 +28,19 @@ class Request(BaseRequest):
     """
     Проверка валидности, полученых данных
     """
-    valid_methods: Final = ['GET', 'POST', 'PUT', 'PATCH']
+    valid_methods: Final = [
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+    ]
 
-    def __init__(self, timeout: int, *args, **kwargs) -> None:
+    def __init__(
+            self,
+            timeout: int,
+            *args,
+            **kwargs,
+    ) -> None:
         super().__init__(*args, **kwargs)
         self.get_timeout = timeout
 

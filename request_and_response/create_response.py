@@ -10,15 +10,16 @@ class Response:
                   400: 'BAD_REQUEST',
                   401: 'NOT_AUTH',
                   404: 'NOT_FOUND',
-                  408: 'TIMEOUT_ERROR'}
+                  408: 'TIMEOUT_ERROR',
+    }
 
     def __init__(self,
                  url: str,
                  method: str,
                  params: dict,
                  status: int,
-                 content='random'
-                 ):
+                 content='random',
+    ):
         self.url = url
         self.method = method
         self.params = params
