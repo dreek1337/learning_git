@@ -51,7 +51,7 @@ def controller(
     return Response(**response_dict)
 
 
-for i in range(1000000):
+for i in range(20):
     timeout = randint(1, 10)
     status = choice([200, 201, 400, 401, 404])
     method = choice(["GET", "POST"])
