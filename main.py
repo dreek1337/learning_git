@@ -8,43 +8,30 @@ def retry(n: int):
     """
     def take_func_retry(func):
         def start(*args, **kwargs):
-            counter = n
-            r = func(*args, **kwargs)
-            if r.status < 300:
-                return r
-            else:
-                while counter:
-                    print(f'Осталось попыток: {counter}')
-                    r = func(*args, **kwargs)
-                    print(r.status)
-                    if r.status < 300:
-                        return r
-                    counter -= 1
-                raise 'Ошибся чел'
+
+            for _ in range(n):
+                r = func(*args, **kwargs)
+                if r.status < 300:
+                    return r
 
         return start
-
     return take_func_retry
 
 
 @retry(n=10)
 def controller(
         url: str,
+        method: str,
         params: dict,
         status: int,
-        method: str,
         timeout: int,
 ) -> Response:
     """
     Проверка данных для создания Response
     """
-    print(f'1. {timeout}')
-    print(f'1. {status}')
     if any((timeout > 5, status > 300)):
-        timeout = randint(1, 7)
+        timeout = randint(1, 10)
         status = choice([200, 201, 400, 401, 404])
-    print(f'2. {timeout}')
-    print(f'2. {status}')
 
     request = Request(
         url=url,
@@ -64,7 +51,7 @@ def controller(
     return Response(**response_dict)
 
 
-for i in range(10):
+for i in range(1000000):
     timeout = randint(1, 10)
     status = choice([200, 201, 400, 401, 404])
     method = choice(["GET", "POST"])
