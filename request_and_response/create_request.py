@@ -1,26 +1,47 @@
 from typing import Final
+from random import choice
 
 
 class BaseRequest:
     """
     Получение запроса от клиента
     """
-    valid_methods = ['GET', 'POST']
+    valid_methods = [
+        'GET',
+        'POST',
+    ]
 
-    def __init__(self, url: str, method, params: dict) -> None:
+    def __init__(
+            self,
+            url: str,
+            method: str,
+            params: dict = None,
+            status: int = None,
+    ) -> None:
         self.get_url = url
         self.get_method = method
         self.get_params = params
+        self.get_status = status
 
 
 class Request(BaseRequest):
     """
     Проверка валидности, полученых данных
     """
-    valid_methods: Final = ['GET', 'POST', 'PUT', 'PATCH']
+    valid_methods: Final = [
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+    ]
 
-    def __init__(self, url: str, method, timeout: int, params: dict = None) -> None:
-        super().__init__(url, method, params)
+    def __init__(
+            self,
+            timeout: int,
+            *args,
+            **kwargs,
+    ) -> None:
+        super().__init__(*args, **kwargs)
         self.get_timeout = timeout
 
     @property
@@ -43,14 +64,14 @@ class Request(BaseRequest):
         if self.get_method in self.valid_methods:
             return self.get_method
         else:
-            raise 'Неподходящий метод HTTP'
+            raise 'Неподходящий метод request_and_response'
 
     @property
     def params(self):
         """
         Проверка валидности params
         """
-        if self.get_params and 5 < len(self.get_params):
+        if not self.get_params or 5 < len(self.get_params):
             raise 'Количество параметров, больше 5 или меньще 1'
         else:
             return self.get_params
@@ -63,4 +84,14 @@ class Request(BaseRequest):
         if self.get_timeout <= 5:
             return self.get_timeout
         else:
-            raise 'Параметр меньше значения 5'
+            raise 'Параметр больше значения 5'
+
+    @property
+    def status(self):
+        """
+        Проверка валидности timeout
+        """
+        if self.get_timeout <= 5:
+            return self.get_status
+        else:
+            return 408
