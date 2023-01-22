@@ -1,48 +1,42 @@
-from typing import Final
-from random import choice
+from pydantic import BaseModel
+from enum import Enum
 
 
-class BaseRequest:
+class BaseRequest(BaseModel):
     """
     Получение запроса от клиента
     """
+    get_url: str
+    get_method: str
+    get_params: dict = None
+    get_status: int = None
+
     valid_methods = [
         'GET',
         'POST',
     ]
-
-    def __init__(
-            self,
-            url: str,
-            method: str,
-            params: dict = None,
-            status: int = None,
-    ) -> None:
-        self.get_url = url
-        self.get_method = method
-        self.get_params = params
-        self.get_status = status
+    
+    def __init__(self, **data) -> None:
+        super().__init__(**data)
 
 
 class Request(BaseRequest):
     """
     Проверка валидности, полученых данных
     """
-    valid_methods: Final = [
-        'GET',
-        'POST',
-        'PUT',
-        'PATCH',
-    ]
+    get_timeout: int
+
+    class ValidMethods(Enum):
+        GET = 'GET'
+        POST = 'POST'
+        PUT = 'PUT'
+        PATCH = 'PATCH'
 
     def __init__(
             self,
-            timeout: int,
-            *args,
-            **kwargs,
+            **data
     ) -> None:
-        super().__init__(*args, **kwargs)
-        self.get_timeout = timeout
+        super().__init__(**data)
 
     @property
     def url(self):
@@ -61,7 +55,8 @@ class Request(BaseRequest):
         """
         Проверка валидности method
         """
-        if self.get_method in self.valid_methods:
+        valid_methods = [i.value for i in self.ValidMethods]
+        if self.get_method in valid_methods:
             return self.get_method
         else:
             raise 'Неподходящий метод request_and_response'

@@ -34,11 +34,11 @@ def controller(
         status = choice([200, 201, 400, 401, 404])
 
     request = Request(
-        url=url,
-        timeout=timeout,
-        status=status,
-        method=method,
-        params=params
+        get_url=url,
+        get_timeout=timeout,
+        get_status=status,
+        get_method=method,
+        get_params=params
     )
 
     response_dict = {
@@ -57,6 +57,9 @@ for i in range(20):
     method = choice(["GET", "POST"])
 
     try:
-        print(controller(url='http:/url', params=dict(d=1, b=2), status=status, method=method, timeout=timeout).__dict__)
+        resp = controller(url='http://url', params=dict(d=1, b=2), status=status,
+                          method=method, timeout=timeout)
+        print(resp.__dict__)
+        print(resp.status_text)
     except Exception as err:
         print(f'*Данные не прошли валидацию* {err}')
